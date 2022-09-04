@@ -10,6 +10,16 @@ function config.telescope()
   local actions = require('telescope.actions')
   require('telescope').setup({
     defaults = {
+      vimgrep_arguments = {
+        'rg',
+        '--color=never',
+        '--no-heading',
+        '--with-filename',
+        '--line-number',
+        '--column',
+        '--smart-case',
+        '--hidden', -- thats the new thing
+      },
       mappings = {
         i = {
           ['<esc>'] = actions.close,
@@ -19,14 +29,14 @@ function config.telescope()
       },
     },
 
-    extensions = {
-      fzf = {
-        fuzzy = true,
-        case_mode = 'smart_case',
-        override_file_sorter = true,
-        override_generic_sorter = true,
-      },
-    },
+    -- extensions = {
+    --   fzf = {
+    --     fuzzy = true,
+    --     case_mode = 'smart_case',
+    --     override_file_sorter = true,
+    --     override_generic_sorter = true,
+    --   },
+    -- },
   })
   require('telescope').load_extension('fzf')
 end
