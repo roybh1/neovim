@@ -16,9 +16,9 @@ key.nmap({
     -- yank to end of line
     { 'Y',         'y$',                                   opts(noremap) },
 
-    -- telescope mappings
-    { '<c-f>',     cmd('Telescope grep_string search=""'), opts(noremap, silent) },
-    { '<c-p>',     utils.telescope_project_files,          opts(noremap, silent) },
+  -- telescope mappings
+  { '<c-f>', cmd('Telescope grep_string search="" hidden=true'), opts(noremap, silent) },
+  { '<c-p>', utils.telescope_project_files, opts(noremap, silent) },
 
     -- formatting
     { '<leader>f', utils.format_buffer,                    opts(noremap, silent) },
