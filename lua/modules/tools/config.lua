@@ -28,15 +28,6 @@ function config.telescope()
         },
       },
     },
-
-    -- extensions = {
-    --   fzf = {
-    --     fuzzy = true,
-    --     case_mode = 'smart_case',
-    --     override_file_sorter = true,
-    --     override_generic_sorter = true,
-    --   },
-    -- },
   })
   require('telescope').load_extension('fzf')
 end
