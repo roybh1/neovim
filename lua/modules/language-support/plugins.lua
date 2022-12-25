@@ -11,6 +11,7 @@ plugin({
     { 'windwp/nvim-autopairs' },
     { 'windwp/nvim-ts-autotag' },
     { 'RRethy/nvim-treesitter-endwise' },
+    { 'nvim-treesitter/nvim-treesitter-context' },
   },
 })
 
@@ -39,7 +40,7 @@ plugin({
     require('modules.language-support.lsp')
   end,
   requires = {
-    { 'folke/lua-dev.nvim' },
+    { 'folke/neodev.nvim' },
     { 'b0o/schemastore.nvim' },
     { 'nvim-lua/plenary.nvim' },
     { 'jose-elias-alvarez/null-ls.nvim' },

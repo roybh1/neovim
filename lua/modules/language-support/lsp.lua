@@ -2,6 +2,8 @@ local mason = require('mason')
 local mason_lspconfig = require('mason-lspconfig')
 local mason_tool_install = require('mason-tool-installer')
 local null_ls = require('null-ls')
+
+require('neodev').setup({})
 local lsp_config = require('lspconfig')
 
 mason.setup({})
@@ -30,6 +32,7 @@ mason_tool_install.setup({
     'shfmt',
     'stylua',
     'prettier',
+    'gofumpt',
     'goimports',
     'prettierd',
 
@@ -44,16 +47,16 @@ null_ls.setup({
   debug = true,
   sources = {
     null_ls.builtins.code_actions.eslint_d,
-
-    -- null_ls.diagnostics.hadolint,
-    -- null_ls.diagnostics.shellcheck,
-    -- null_ls.diagnostics.golangci_lint,
+    null_ls.builtins.diagnostics.golangci_lint,
 
     null_ls.builtins.formatting.shfmt,
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.eslint_d,
-    null_ls.builtins.formatting.prettierd,
+    null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.goimports,
+    null_ls.builtins.formatting.gofumpt,
+    null_ls.builtins.formatting.prismaFmt,
+    null_ls.builtins.formatting.buf,
     null_ls.builtins.formatting.black.with({ args = { '-' } }),
   },
 })
@@ -109,7 +112,6 @@ local common_setup_handler = function(server_name)
     },
     jsonls = { settings = { json = { schemas = require('schemastore').json.schemas() } } },
     tsserver = { commands = { OrganizeImports = { organize_imports } } },
-    sumneko_lua = require('lua-dev').setup(default_opts),
   }
 
   local server_opts = vim.tbl_extend('force', default_opts, server_overrides[server_name] or {})
