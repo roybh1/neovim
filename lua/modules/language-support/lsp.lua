@@ -18,26 +18,29 @@ mason_tool_install.setup({
     'css-lsp',
     'html-lsp',
     'json-lsp',
+    'eslint-lsp',
     'rust-analyzer',
     'vim-language-server',
     'lua-language-server',
     'yaml-language-server',
     'bash-language-server',
+    'prisma-language-server',
     'dockerfile-language-server',
     'typescript-language-server',
+    'tailwindcss-language-server',
 
     -- ensure formatters installed
-    'black',
+    'buf',
     'isort',
+    'black',
     'shfmt',
     'stylua',
-    'prettier',
     'gofumpt',
+    'prettier',
     'goimports',
     'prettierd',
 
     -- ensure linters installed
-    'eslint_d',
     'hadolint',
     'golangci-lint',
   },
@@ -46,17 +49,17 @@ mason_tool_install.setup({
 null_ls.setup({
   debug = true,
   sources = {
-    null_ls.builtins.code_actions.eslint_d,
     null_ls.builtins.diagnostics.golangci_lint,
 
+    null_ls.builtins.formatting.rustfmt,
     null_ls.builtins.formatting.shfmt,
     null_ls.builtins.formatting.stylua,
-    null_ls.builtins.formatting.eslint_d,
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.goimports,
     null_ls.builtins.formatting.gofumpt,
     null_ls.builtins.formatting.prismaFmt,
     null_ls.builtins.formatting.buf,
+    null_ls.builtins.formatting.isort,
     null_ls.builtins.formatting.black.with({ args = { '-' } }),
   },
 })
@@ -78,15 +81,15 @@ local common_on_attach = function(_, bufnr)
   keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
 end
 
+local common_handlers = {
+  ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'single' }),
+  ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'single' }),
+}
+
 -- handle lsp server initialization
 local common_setup_handler = function(server_name)
-  local handlers = {
-    ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'single' }),
-    ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'single' }),
-  }
-
   local default_opts = {
-    handlers = handlers,
+    handlers = common_handlers,
     on_attach = common_on_attach,
     capabilities = vim.lsp.protocol.make_client_capabilities(),
   }
@@ -118,4 +121,14 @@ local common_setup_handler = function(server_name)
   lsp_config[server_name].setup(server_opts)
 end
 
-mason_lspconfig.setup_handlers({ common_setup_handler })
+mason_lspconfig.setup_handlers({
+  common_setup_handler,
+  ['rust_analyzer'] = function()
+    require('rust-tools').setup({
+      server = {
+        on_attach = common_on_attach,
+        handlers = common_handlers,
+      },
+    })
+  end,
+})
